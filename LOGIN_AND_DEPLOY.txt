@@ -1,0 +1,57 @@
+===========================================================
+CARA FIX ERROR 404 "DEPLOYMENT_NOT_FOUND" - SI-JAPIRS
+===========================================================
+
+MASALAH: Project belum di-deploy ke Vercel!
+
+===========================================================
+LANGKAH 1: LOGIN VERCEL (WAJIB!)
+===========================================================
+
+Buka Command Prompt, ketik:
+
+vercel login
+
+Tekan ENTER, browser akan terbuka.
+Login dengan GitHub (username: JVsHARK31)
+Klik "Authorize"
+Tunggu sampai muncul "Success!"
+
+===========================================================
+LANGKAH 2: DEPLOY PROJECT
+===========================================================
+
+Di Command Prompt yang sama, ketik:
+
+cd "C:\Users\HP\Downloads\Website Si-JAPIR\si-japir"
+vercel
+
+Jawab pertanyaan:
+- Set up and deploy? → ketik: Y
+- Which scope? → pilih nama Anda (tekan Enter)
+- Link to existing project? → ketik: N
+- Project name? → ketik: si-japirs
+- In which directory? → tekan Enter saja
+- Override settings? → ketik: N
+
+Tunggu deploy selesai (2-3 menit)
+
+===========================================================
+LANGKAH 3: DEPLOY KE PRODUCTION
+===========================================================
+
+Setelah selesai, ketik:
+
+vercel --prod
+
+===========================================================
+HASIL: Website live di https://si-japirs.vercel.app
+===========================================================
+
+ATAU CARA MUDAH:
+================
+
+1. Double click file: deploy-now.bat
+2. Ikuti instruksi di layar
+
+===========================================================
