@@ -1,0 +1,173 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  locale        String    @default("id")
+  theme         String    @default("system")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts   Account[]
+  sessions   Session[]
+  documents  Document[]
+  uploads    Upload[]
+  citations  Citation[]
+  jobs       Job[]
+  tasks      Task[]
+  chats      Chat[]
+  statistics Statistic[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Document {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  type      String   // skripsi, jurnal, kti, essay, etc.
+  content   String   @db.Text
+  outline   Json?    // Document outline structure
+  metadata  Json?    // Additional metadata
+  status    String   @default("draft") // draft, review, final
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  citations Citation[]
+  jobs      Job[]
+}
+
+model Upload {
+  id        String   @id @default(cuid())
+  userId    String
+  filename  String
+  path      String
+  mimeType  String
+  size      Int
+  type      String   // pdf, csv, excel, word, etc.
+  metadata  Json?    // Extracted metadata
+  createdAt DateTime @default(now())
+
+  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobs Job[]
+}
+
+model Citation {
+  id         String   @id @default(cuid())
+  userId     String
+  documentId String?
+  style      String   // APA, MLA, IEEE, etc.
+  entries    Json     // Array of citation entries
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  document Document? @relation(fields: [documentId], references: [id], onDelete: Cascade)
+}
+
+model Job {
+  id          String   @id @default(cuid())
+  userId      String
+  type        String   // summarize, generate, plagiarism, stats, slides, etc.
+  status      String   @default("queued") // queued, running, completed, failed
+  documentId  String?  // Reference to document ID
+  uploadId    String?  // Reference to upload ID
+  outputRef   String?  // Reference to result
+  input       Json?    // Input parameters
+  output      Json?    // Output results
+  error       String?  @db.Text
+  startedAt   DateTime?
+  completedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  document  Document? @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  upload    Upload?   @relation(fields: [uploadId], references: [id], onDelete: Cascade)
+}
+
+model Task {
+  id          String    @id @default(cuid())
+  userId      String
+  title       String
+  description String?   @db.Text
+  dueAt       DateTime?
+  status      String    @default("pending") // pending, in_progress, completed, cancelled
+  priority    String    @default("medium") // low, medium, high
+  category    String?   // tugas, seminar, sidang, etc.
+  reminder    Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Chat {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String?
+  messages  Json     // Array of chat messages
+  mode      String   @default("general") // general, eli5, academic
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Statistic {
+  id          String   @id @default(cuid())
+  userId      String
+  datasetName String
+  data        Json     // Original data
+  analysis    Json     // Analysis results
+  charts      Json?    // Chart configurations
+  summary     String?  @db.Text
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
