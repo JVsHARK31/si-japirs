@@ -125,50 +125,50 @@ export default function HomePage() {
     <div className="min-h-screen bg-gradient-to-b from-background to-muted">
       {/* Navigation */}
       <nav className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 items-center justify-between">
+        <div className="container flex h-14 sm:h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-2">
             <Image
               src="/logo.jpeg"
               alt="Si-JAPIRS Logo"
-              width={40}
-              height={40}
-              className="rounded-lg"
+              width={32}
+              height={32}
+              className="rounded-lg sm:w-10 sm:h-10"
             />
-            <span className="font-heading text-xl font-bold">Si-JAPIRS</span>
+            <span className="font-heading text-lg sm:text-xl font-bold">Si-JAPIRS</span>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <Link href="/auth/sign-in">
-              <Button variant="ghost">Masuk</Button>
+              <Button variant="ghost" size="sm" className="sm:size-default">Masuk</Button>
             </Link>
             <Link href="/auth/sign-in">
-              <Button>Mulai Gratis</Button>
+              <Button size="sm" className="sm:size-default">Mulai Gratis</Button>
             </Link>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="container py-20 text-center">
+      <section className="container px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h1 className="mb-6 text-5xl font-bold tracking-tight lg:text-7xl bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          <h1 className="mb-4 sm:mb-6 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             AI Academic Assistant
           </h1>
-          <p className="mb-8 text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="mb-6 sm:mb-8 text-base sm:text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto px-4">
             Platform AI terlengkap untuk membantu mahasiswa dan dosen dalam penulisan akademik, 
             riset, analisis data, dan presentasi. Selesaikan tugas akademik lebih cepat dan berkualitas!
           </p>
-          <div className="flex gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
             <Link href="/auth/sign-in">
-              <Button size="lg" className="gap-2">
+              <Button size="lg" className="w-full sm:w-auto gap-2">
                 Mulai Gratis <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
             <Link href="#features">
-              <Button size="lg" variant="outline">
+              <Button size="lg" variant="outline" className="w-full sm:w-auto">
                 Lihat Fitur
               </Button>
             </Link>
@@ -197,33 +197,33 @@ export default function HomePage() {
       </section>
 
       {/* Stats Section */}
-      <section className="container py-12">
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+      <section className="container px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div className="grid grid-cols-2 gap-4 sm:gap-6 md:gap-8 md:grid-cols-4">
           {stats.map((stat, index) => (
             <motion.div
               key={stat.label}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="text-center"
+              className="text-center p-2 sm:p-4"
             >
-              <div className="text-3xl font-bold text-primary">{stat.value}</div>
-              <div className="text-sm text-muted-foreground">{stat.label}</div>
+              <div className="text-xl sm:text-2xl md:text-3xl font-bold text-primary">{stat.value}</div>
+              <div className="text-xs sm:text-sm text-muted-foreground mt-1">{stat.label}</div>
             </motion.div>
           ))}
         </div>
       </section>
 
       {/* Features Section */}
-      <section id="features" className="container py-20">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">Fitur Lengkap untuk Kebutuhan Akademik</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+      <section id="features" className="container px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Fitur Lengkap untuk Kebutuhan Akademik</h2>
+          <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto px-4">
             Semua tools yang Anda butuhkan untuk sukses dalam dunia akademik
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           {features.map((feature, index) => (
             <motion.div
               key={feature.title}
@@ -234,11 +234,11 @@ export default function HomePage() {
               <Link href={feature.href}>
                 <Card className="h-full transition-all hover:shadow-lg hover:-translate-y-1 hover:border-primary/50">
                   <CardHeader>
-                    <feature.icon className={`h-10 w-10 mb-2 ${feature.color}`} />
-                    <CardTitle className="text-lg">{feature.title}</CardTitle>
+                    <feature.icon className={`h-8 w-8 sm:h-10 sm:w-10 mb-2 ${feature.color}`} />
+                    <CardTitle className="text-base sm:text-lg">{feature.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <CardDescription>{feature.description}</CardDescription>
+                    <CardDescription className="text-xs sm:text-sm">{feature.description}</CardDescription>
                   </CardContent>
                 </Card>
               </Link>
@@ -248,11 +248,11 @@ export default function HomePage() {
       </section>
 
       {/* Benefits Section */}
-      <section className="container py-20">
-        <div className="grid gap-12 lg:grid-cols-2 items-center">
+      <section className="container px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20">
+        <div className="grid gap-8 sm:gap-12 lg:grid-cols-2 items-center">
           <div>
-            <h2 className="text-3xl font-bold mb-6">Mengapa Si-JAPIRS?</h2>
-            <div className="space-y-4">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Mengapa Si-JAPIRS?</h2>
+            <div className="space-y-3 sm:space-y-4">
               {[
                 { icon: Zap, title: "Cepat & Efisien", desc: "Selesaikan tugas akademik 10x lebih cepat" },
                 { icon: Shield, title: "Aman & Terpercaya", desc: "Data Anda dilindungi dengan enkripsi tingkat tinggi" },
@@ -289,13 +289,13 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="container py-20">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">Apa Kata Pengguna Kami</h2>
-          <p className="text-muted-foreground">Dipercaya oleh ribuan mahasiswa dan dosen di Indonesia</p>
+      <section className="container px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Apa Kata Pengguna Kami</h2>
+          <p className="text-sm sm:text-base text-muted-foreground">Dipercaya oleh ribuan mahasiswa dan dosen di Indonesia</p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {testimonials.map((testimonial, index) => (
             <motion.div
               key={index}
@@ -326,11 +326,11 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="container py-20">
+      <section className="container px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20">
         <Card className="bg-gradient-to-r from-primary to-primary/80 text-white border-0">
-          <CardContent className="py-12 text-center">
-            <h2 className="text-3xl font-bold mb-4">Siap Tingkatkan Produktivitas Akademik Anda?</h2>
-            <p className="mb-8 text-lg opacity-90 max-w-2xl mx-auto">
+          <CardContent className="py-8 sm:py-12 text-center px-4 sm:px-6">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4">Siap Tingkatkan Produktivitas Akademik Anda?</h2>
+            <p className="mb-6 sm:mb-8 text-sm sm:text-base md:text-lg opacity-90 max-w-2xl mx-auto">
               Bergabung dengan ribuan pengguna yang sudah merasakan manfaatnya. 
               Gratis untuk 7 hari pertama!
             </p>
@@ -344,28 +344,28 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t py-12 mt-20">
-        <div className="container">
-          <div className="grid gap-8 md:grid-cols-4">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
+      <footer className="border-t py-8 sm:py-12 mt-12 sm:mt-16 md:mt-20">
+        <div className="container px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-6 sm:gap-8 grid-cols-2 sm:grid-cols-2 md:grid-cols-4">
+            <div className="col-span-2 sm:col-span-1">
+              <div className="flex items-center gap-2 mb-3 sm:mb-4">
                 <Image
                   src="/logo.jpeg"
                   alt="Si-JAPIRS"
-                  width={32}
-                  height={32}
-                  className="rounded-lg"
+                  width={28}
+                  height={28}
+                  className="rounded-lg sm:w-8 sm:h-8"
                 />
-                <span className="font-heading font-bold">Si-JAPIRS</span>
+                <span className="font-heading font-bold text-sm sm:text-base">Si-JAPIRS</span>
               </div>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 AI Academic Assistant untuk mahasiswa & dosen Indonesia
               </p>
             </div>
             
             <div>
-              <h3 className="font-semibold mb-3">Produk</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
+              <h3 className="font-semibold mb-2 sm:mb-3 text-sm sm:text-base">Produk</h3>
+              <ul className="space-y-1 sm:space-y-2 text-xs sm:text-sm text-muted-foreground">
                 <li><Link href="/writer" className="hover:text-foreground">AI Writer</Link></li>
                 <li><Link href="/summarizer" className="hover:text-foreground">Summarizer</Link></li>
                 <li><Link href="/research" className="hover:text-foreground">Research</Link></li>
@@ -374,8 +374,8 @@ export default function HomePage() {
             </div>
             
             <div>
-              <h3 className="font-semibold mb-3">Perusahaan</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
+              <h3 className="font-semibold mb-2 sm:mb-3 text-sm sm:text-base">Perusahaan</h3>
+              <ul className="space-y-1 sm:space-y-2 text-xs sm:text-sm text-muted-foreground">
                 <li><Link href="/about" className="hover:text-foreground">Tentang</Link></li>
                 <li><Link href="/blog" className="hover:text-foreground">Blog</Link></li>
                 <li><Link href="/careers" className="hover:text-foreground">Karir</Link></li>
@@ -384,15 +384,15 @@ export default function HomePage() {
             </div>
             
             <div>
-              <h3 className="font-semibold mb-3">Legal</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
+              <h3 className="font-semibold mb-2 sm:mb-3 text-sm sm:text-base">Legal</h3>
+              <ul className="space-y-1 sm:space-y-2 text-xs sm:text-sm text-muted-foreground">
                 <li><Link href="/privacy" className="hover:text-foreground">Privasi</Link></li>
                 <li><Link href="/terms" className="hover:text-foreground">Syarat & Ketentuan</Link></li>
               </ul>
             </div>
           </div>
           
-          <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
+          <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t text-center text-xs sm:text-sm text-muted-foreground">
             <p>&copy; 2025 Si-JAPIRS. All rights reserved.</p>
           </div>
         </div>

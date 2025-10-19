@@ -58,6 +58,85 @@
   }
 }
 
+/* Mobile-first responsive improvements */
+@layer utilities {
+  /* Responsive text sizing */
+  .text-xs-sm {
+    @apply text-xs sm:text-sm;
+  }
+  .text-sm-base {
+    @apply text-sm sm:text-base;
+  }
+  .text-base-lg {
+    @apply text-base sm:text-lg;
+  }
+  .text-lg-xl {
+    @apply text-lg sm:text-xl;
+  }
+  
+  /* Responsive padding */
+  .p-responsive {
+    @apply p-4 sm:p-6 lg:p-8;
+  }
+  .px-responsive {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+  .py-responsive {
+    @apply py-4 sm:py-6 lg:py-8;
+  }
+  
+  /* Responsive gaps */
+  .gap-responsive {
+    @apply gap-4 sm:gap-6 lg:gap-8;
+  }
+}
+
+/* Mobile menu improvements */
+@media (max-width: 640px) {
+  .hide-mobile {
+    display: none !important;
+  }
+  
+  /* Touch-friendly button sizing */
+  button, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Better spacing for mobile */
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Tablet improvements */
+@media (min-width: 640px) and (max-width: 1024px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* Improved scrollbar for mobile */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(var(--muted-foreground) / 0.5);
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;700&family=Outfit:wght@400;500;700&display=swap');
 
 html {

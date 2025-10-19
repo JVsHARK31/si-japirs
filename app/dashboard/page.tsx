@@ -142,24 +142,24 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
-      <div className="container py-8">
+      <div className="container px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center justify-between"
+            className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
           >
             <div>
-              <h1 className="text-3xl font-bold">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">
                 Selamat datang, {session.user.name}! 👋
               </h1>
-              <p className="text-muted-foreground mt-2">
+              <p className="text-sm sm:text-base text-muted-foreground mt-1 sm:mt-2">
                 {new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
               </p>
             </div>
-            <Link href="/writer">
-              <Button size="lg" className="gap-2">
+            <Link href="/writer" className="w-full sm:w-auto">
+              <Button size="lg" className="gap-2 w-full sm:w-auto">
                 <Plus className="h-4 w-4" />
                 Dokumen Baru
               </Button>
@@ -172,26 +172,26 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="grid gap-4 md:grid-cols-4 mb-8"
+          className="grid gap-3 sm:gap-4 grid-cols-2 md:grid-cols-4 mb-6 sm:mb-8"
         >
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Dokumen</CardTitle>
-              <FileText className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 sm:p-4 md:p-6">
+              <CardTitle className="text-xs sm:text-sm font-medium">Total Dokumen</CardTitle>
+              <FileText className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.totalDocuments}</div>
+            <CardContent className="p-3 pt-0 sm:p-4 sm:pt-0 md:p-6 md:pt-0">
+              <div className="text-lg sm:text-xl md:text-2xl font-bold">{stats.totalDocuments}</div>
               <p className="text-xs text-muted-foreground">+2 minggu ini</p>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Tugas Selesai</CardTitle>
-              <CheckCircle className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 sm:p-4 md:p-6">
+              <CardTitle className="text-xs sm:text-sm font-medium">Tugas Selesai</CardTitle>
+              <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.completedTasks}</div>
+            <CardContent className="p-3 pt-0 sm:p-4 sm:pt-0 md:p-6 md:pt-0">
+              <div className="text-lg sm:text-xl md:text-2xl font-bold">{stats.completedTasks}</div>
               <Progress value={completionRate} className="mt-2" />
             </CardContent>
           </Card>
