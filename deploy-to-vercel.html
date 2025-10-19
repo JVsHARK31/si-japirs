@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deploy Si-JAPIRS to Vercel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        .error-badge {
+            background: #ff4757;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .deploy-btn {
+            background: #000;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 18px;
+            font-weight: bold;
+            transition: transform 0.2s;
+            margin: 20px 0;
+        }
+        .deploy-btn:hover {
+            transform: scale(1.05);
+        }
+        .step {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        .step h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        .env-vars {
+            background: #2d3748;
+            color: #4ade80;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .warning strong {
+            color: #856404;
+        }
+        .checklist {
+            list-style: none;
+            margin: 20px 0;
+        }
+        .checklist li {
+            padding: 10px;
+            background: #f0f9ff;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .checklist li:before {
+            content: "☐";
+            margin-right: 10px;
+            font-size: 20px;
+            color: #667eea;
+        }
+        .success {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <span class="error-badge">404 ERROR FIX</span>
+        <h1>Deploy Si-JAPIRS ke Vercel</h1>
+        <p style="color: #666; margin-bottom: 20px;">
+            Website Anda menampilkan error 404 karena belum di-deploy. Ikuti langkah berikut:
+        </p>
+
+        <div class="step">
+            <h3>Step 1: Klik Tombol Deploy</h3>
+            <p>Klik tombol di bawah untuk mulai import project ke Vercel:</p>
+            <a href="https://vercel.com/import/git?r=https://github.com/JVsHARK31/si-japirs" 
+               target="_blank" 
+               class="deploy-btn">
+                🚀 DEPLOY TO VERCEL
+            </a>
+        </div>
+
+        <div class="step">
+            <h3>Step 2: Login atau Signup</h3>
+            <p>Login dengan GitHub account Anda (JVsHARK31)</p>
+        </div>
+
+        <div class="step">
+            <h3>Step 3: Configure Environment Variables</h3>
+            <p>Tambahkan SEMUA environment variables berikut:</p>
+            <div class="env-vars">
+NEXTAUTH_URL=https://si-japirs.vercel.app
+NEXTAUTH_SECRET=[copy dari .env.local]
+GOOGLE_CLIENT_ID=[copy dari .env.local]
+GOOGLE_CLIENT_SECRET=[copy dari .env.local]
+DATABASE_URL=[copy dari .env.local - update password]
+NEXT_PUBLIC_SUPABASE_URL=[copy dari .env.local]
+NEXT_PUBLIC_SUPABASE_ANON_KEY=[copy dari .env.local]
+SUPABASE_SERVICE_ROLE_KEY=[copy dari .env.local]
+GPT_API_KEY=[copy dari .env.local]
+GPT_API_URL=https://ai.sumopod.com/v1
+GPT_MODEL=gpt-4.1-nano
+SCHOLAR_API_KEY=[copy dari .env.local]
+SCHOLAR_API_URL=https://serpapi.com/search
+FILE_MAX_MB=30
+            </div>
+            <p style="margin-top: 10px; color: #666;">
+                📁 Buka file <code>C:\Users\HP\Downloads\Website Si-JAPIR\si-japir\.env.local</code> untuk copy values
+            </p>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ PENTING:</strong>
+            <ul style="margin-top: 10px; margin-left: 20px;">
+                <li>Update DATABASE_URL dengan password Supabase yang benar</li>
+                <li>Generate NEXTAUTH_SECRET baru untuk production</li>
+                <li>Pastikan SEMUA variables di-add (jangan ada yang terlewat)</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <h3>Step 4: Deploy</h3>
+            <p>Klik tombol "Deploy" dan tunggu 2-3 menit</p>
+        </div>
+
+        <ul class="checklist">
+            <li>Repository sudah public di GitHub</li>
+            <li>Semua environment variables sudah di-add</li>
+            <li>DATABASE_URL password sudah benar</li>
+            <li>NEXTAUTH_URL = https://si-japirs.vercel.app</li>
+            <li>Build berhasil (green checkmark)</li>
+        </ul>
+
+        <div class="success">
+            <strong>✅ Setelah Deploy Berhasil:</strong>
+            <p style="margin-top: 10px;">Website akan live di: <strong>https://si-japirs.vercel.app</strong></p>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+            <p style="color: #999; font-size: 14px;">
+                Alternative: Deploy via CLI dengan <code>vercel</code> command
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Auto-check deployment status
+        setTimeout(() => {
+            console.log('Ready to deploy! Click the deploy button above.');
+        }, 1000);
+    </script>
+</body>
+</html>

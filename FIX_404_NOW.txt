@@ -1,0 +1,57 @@
+=====================================================
+FIX 404 ERROR - SI-JAPIRS VERCEL DEPLOYMENT
+=====================================================
+
+PROBLEM: Your site shows 404 because it hasn't been deployed to Vercel yet!
+
+SOLUTION: Follow these 3 simple steps:
+
+1. CLICK THIS LINK TO DEPLOY:
+   https://vercel.com/new/clone?repository-url=https://github.com/JVsHARK31/si-japirs
+
+2. When Vercel opens:
+   - Sign in with your GitHub account
+   - Click "Import" or "Clone"
+   - Scroll down to "Environment Variables"
+   - Click "Add" and paste EACH of these (copy from your .env.local file):
+
+   NEXTAUTH_URL = https://si-japirs.vercel.app
+   NEXTAUTH_SECRET = [generate new secret]
+   GOOGLE_CLIENT_ID = [copy from .env.local]
+   GOOGLE_CLIENT_SECRET = [copy from .env.local]
+   DATABASE_URL = [copy from .env.local]
+   NEXT_PUBLIC_SUPABASE_URL = [copy from .env.local]
+   NEXT_PUBLIC_SUPABASE_ANON_KEY = [copy from .env.local]
+   SUPABASE_SERVICE_ROLE_KEY = [copy from .env.local]
+   GPT_API_KEY = [copy from .env.local]
+   GPT_API_URL = https://ai.sumopod.com/v1
+   GPT_MODEL = gpt-4.1-nano
+   SCHOLAR_API_KEY = [copy from .env.local]
+   SCHOLAR_API_URL = https://serpapi.com/search
+   FILE_MAX_MB = 30
+
+3. Click "Deploy" and wait 2-3 minutes
+
+RESULT: Your site will be live at https://si-japirs.vercel.app
+
+=====================================================
+NEED THE ACTUAL VALUES?
+=====================================================
+
+Open this file on your computer:
+C:\Users\HP\Downloads\Website Si-JAPIR\si-japir\.env.local
+
+Copy all the values from there to Vercel!
+
+=====================================================
+STILL CONFUSED?
+=====================================================
+
+Alternative method:
+1. Go to: https://vercel.com/dashboard
+2. Click "Add New" -> "Project"
+3. Import "JVsHARK31/si-japirs"
+4. Add environment variables (from .env.local)
+5. Deploy!
+
+=====================================================
