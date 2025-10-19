@@ -30,8 +30,8 @@ export async function POST(request: NextRequest) {
     })
 
     // Parse outline text into structured format
-    const outlineLines = outlineText.split('\n').filter(line => line.trim())
-    const outline = outlineLines.map((line, index) => {
+    const outlineLines = outlineText.split('\n').filter((line: string) => line.trim())
+    const outline = outlineLines.map((line: string, index: number) => {
       const level = line.startsWith('  ') ? 2 : 1
       const title = line.trim().replace(/^[-*\d.]+\s*/, '')
       return {
