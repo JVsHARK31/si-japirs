@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { ThemeToggleSimple } from '@/components/theme-toggle'
 import { 
   BookOpen, 
   FileText, 
@@ -137,6 +138,7 @@ export default function HomePage() {
             <span className="font-heading text-lg sm:text-xl font-bold">Si-JAPIRS</span>
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
+            <ThemeToggleSimple />
             <Link href="/auth/sign-in">
               <Button variant="ghost" size="sm" className="sm:size-default">Masuk</Button>
             </Link>
