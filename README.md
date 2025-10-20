@@ -4,7 +4,7 @@ Si-JAPIRS - AI Academic Assistant
 
 Platform AI komprehensif untuk membantu mahasiswa dan dosen dalam penulisan akademik, riset, analisis data, dan presentasi.
 
-![Si-JAPIRS Logo](public/logo.jpeg)
+![Si-JAPIRS Logo](public/logo.jpg)
 
 ## 🚀 Fitur Utama
 

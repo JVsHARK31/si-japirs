@@ -128,7 +128,7 @@ export default function HomePage() {
         <div className="container flex h-14 sm:h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-2">
             <Image
-              src="/logo.jpeg"
+              src="/logo.jpg"
               alt="Si-JAPIRS Logo"
               width={32}
               height={32}
@@ -185,7 +185,7 @@ export default function HomePage() {
           <div className="relative mx-auto max-w-5xl">
             <div className="absolute inset-0 bg-gradient-to-r from-secondary/20 to-primary/20 blur-3xl" />
             <Image
-              src="/logo.jpeg"
+              src="/logo.jpg"
               alt="Si-JAPIRS Platform"
               width={1200}
               height={600}
@@ -278,7 +278,7 @@ export default function HomePage() {
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 blur-3xl" />
             <Image
-              src="/logo.jpeg"
+              src="/logo.jpg"
               alt="Benefits"
               width={600}
               height={400}
@@ -350,7 +350,7 @@ export default function HomePage() {
             <div className="col-span-2 sm:col-span-1">
               <div className="flex items-center gap-2 mb-3 sm:mb-4">
                 <Image
-                  src="/logo.jpeg"
+                  src="/logo.jpg"
                   alt="Si-JAPIRS"
                   width={28}
                   height={28}

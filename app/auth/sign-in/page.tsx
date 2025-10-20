@@ -36,7 +36,7 @@ function SignInContent() {
         <CardHeader className="space-y-1">
           <div className="flex justify-center mb-4">
             <Image
-              src="/logo.jpeg"
+              src="/logo.jpg"
               alt="Si-JAPIRS Logo"
               width={80}
               height={80}
