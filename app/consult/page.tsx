@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { HeaderBackButton } from '@/components/back-button'
 import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Badge } from '@/components/ui/badge'
@@ -250,6 +251,13 @@ Hasil penelitian menunjukkan bahwa implementasi konsep ini dapat meningkatkan ef
 
   return (
     <div className="container py-4 max-w-6xl">
+      {/* Back Button */}
+      <HeaderBackButton 
+        title="AI Consultation" 
+        subtitle="Chat dengan AI untuk bantuan akademik"
+        className="mb-4"
+      />
+      
       <div className="grid gap-4 lg:grid-cols-4">
         {/* Sidebar */}
         <div className="lg:col-span-1 space-y-4">

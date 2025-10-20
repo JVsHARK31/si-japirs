@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { HeaderBackButton } from '@/components/back-button'
 import { Progress } from '@/components/ui/progress'
 import { 
   FileText, 
@@ -143,6 +144,13 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
       <div className="container px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        {/* Back Button */}
+        <HeaderBackButton 
+          homeButton={true}
+          label="Home"
+          className="mb-4"
+        />
+        
         {/* Header */}
         <div className="mb-6 sm:mb-8">
           <motion.div

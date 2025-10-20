@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { HeaderBackButton } from '@/components/back-button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -146,6 +147,13 @@ export default function ResearchPage() {
 
   return (
     <div className="container py-8 max-w-7xl">
+      {/* Back Button */}
+      <HeaderBackButton 
+        title="Research Helper" 
+        subtitle="Cari referensi dan generate sitasi otomatis"
+        className="mb-6"
+      />
+      
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold flex items-center gap-2">
