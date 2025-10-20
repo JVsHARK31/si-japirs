@@ -685,13 +685,13 @@ Value4,Value5,Value6"
                       </CardHeader>
                       <CardContent>
                         <div className="h-64 flex items-end justify-around p-4 bg-muted rounded-lg">
-                          {result.visualization.data.values.map((value: number, idx: number) => (
+                          {result.visualization?.data?.values?.map((value: number, idx: number) => (
                             <div key={idx} className="flex flex-col items-center gap-2">
                               <div 
                                 className="w-12 bg-primary rounded-t transition-all hover:bg-primary/80"
-                                style={{ height: `${(value / Math.max(...result.visualization.data.values)) * 200}px` }}
+                                style={{ height: `${(value / Math.max(...(result.visualization?.data?.values || [1]))) * 200}px` }}
                               />
-                              <span className="text-xs">{result.visualization.data.labels[idx]}</span>
+                              <span className="text-xs">{result.visualization?.data?.labels?.[idx]}</span>
                             </div>
                           ))}
                         </div>
