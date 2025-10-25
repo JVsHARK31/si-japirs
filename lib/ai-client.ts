@@ -29,6 +29,37 @@ interface GenerateOptions {
   model?: ModelType
 }
 
+// API Response Types
+interface ChatCompletionChoice {
+  index: number
+  message: {
+    role: string
+    content: string
+  }
+  finish_reason: string
+}
+
+interface ChatCompletionUsage {
+  prompt_tokens: number
+  completion_tokens: number
+  total_tokens: number
+}
+
+interface ChatCompletionResponse {
+  id: string
+  object: string
+  created: number
+  model: string
+  choices: ChatCompletionChoice[]
+  usage?: ChatCompletionUsage
+}
+
+interface ModelInfo {
+  key: string
+  value: string
+  name: string
+}
+
 class AIClient {
   private apiUrl: string
   private apiKey: string
@@ -42,18 +73,18 @@ class AIClient {
   }
 
   // Method to switch models
-  setModel(modelType: ModelType) {
+  setModel(modelType: ModelType): string {
     this.currentModel = AVAILABLE_MODELS[modelType]
     return this.currentModel
   }
 
   // Get current model
-  getCurrentModel() {
+  getCurrentModel(): string {
     return this.currentModel
   }
 
   // Get all available models
-  getAvailableModels() {
+  getAvailableModels(): ModelInfo[] {
     return Object.entries(AVAILABLE_MODELS).map(([key, value]) => ({
       key,
       value,
@@ -74,13 +105,13 @@ class AIClient {
     return names[modelType] || modelType
   }
 
-  async generateCompletion(options: GenerateOptions) {
-    try {
-      // Use specified model or current model
-      const modelToUse = options.model 
-        ? AVAILABLE_MODELS[options.model]
-        : this.currentModel
+  async generateCompletion(options: GenerateOptions): Promise<ChatCompletionResponse> {
+    // Use specified model or current model
+    const modelToUse = options.model 
+      ? AVAILABLE_MODELS[options.model]
+      : this.currentModel
 
+    try {
       // Validate API key
       if (!this.apiKey) {
         throw new Error('API key is not configured. Please set OPENAI_API_KEY in environment variables.')
@@ -162,7 +193,7 @@ class AIClient {
     outline?: string[]
     locale?: string
     length?: number
-  }) {
+  }): Promise<string> {
     const systemPrompt = `Kamu adalah asisten akademik AI yang membantu menulis ${type} berkualitas tinggi.
     Gunakan bahasa ${locale === 'id' ? 'Indonesia' : 'Inggris'} yang formal dan akademis.
     ${style ? `Gunakan gaya sitasi ${style}.` : ''}
@@ -191,7 +222,7 @@ class AIClient {
     text: string
     tone?: string
     locale?: string
-  }) {
+  }): Promise<string> {
     const systemPrompt = `Kamu adalah asisten yang membantu menyusun ulang teks dengan mempertahankan makna asli.
     Gunakan bahasa ${locale === 'id' ? 'Indonesia' : 'Inggris'} dengan nada ${tone}.`
 
@@ -212,7 +243,7 @@ class AIClient {
   }: {
     text: string
     locale?: string
-  }) {
+  }): Promise<string> {
     const systemPrompt = `Kamu adalah asisten yang memeriksa dan memperbaiki kesalahan tata bahasa.
     Periksa teks dalam bahasa ${locale === 'id' ? 'Indonesia' : 'Inggris'}.
     Berikan teks yang sudah diperbaiki dan daftar koreksi yang dilakukan.`
@@ -235,7 +266,7 @@ class AIClient {
     text: string
     length?: 'short' | 'medium' | 'detailed'
     locale?: string
-  }) {
+  }): Promise<string> {
     const lengthInstruction = {
       short: '2-3 paragraf singkat',
       medium: '4-5 paragraf sedang',
@@ -264,7 +295,7 @@ class AIClient {
     topic: string
     type: string
     locale?: string
-  }) {
+  }): Promise<string> {
     const systemPrompt = `Kamu adalah asisten yang membuat outline untuk penulisan ${type}.
     Gunakan bahasa ${locale === 'id' ? 'Indonesia' : 'Inggris'}.
     Buat outline yang terstruktur dengan bab dan sub-bab.`
@@ -287,7 +318,7 @@ class AIClient {
     messages: ChatMessage[]
     mode?: 'general' | 'eli5' | 'academic'
     model?: ModelType
-  }) {
+  }): Promise<string> {
     const systemPrompts = {
       general: 'Kamu adalah asisten AI yang membantu mahasiswa dan dosen dengan pertanyaan akademik.',
       eli5: 'Kamu adalah asisten yang menjelaskan konsep kompleks dengan bahasa sederhana dan analogi yang mudah dipahami.',
@@ -313,7 +344,7 @@ class AIClient {
   }: {
     content: string
     title: string
-  }) {
+  }): Promise<{ slides: any[] }> {
     const systemPrompt = `Kamu adalah asisten yang membuat outline presentasi dari konten akademik.
     Buat struktur slide yang menarik dengan poin-poin utama.
     Format output dalam JSON dengan struktur: { slides: [{ title, content, notes }] }`
@@ -338,7 +369,7 @@ class AIClient {
   }: {
     data: any
     analysisType: string
-  }) {
+  }): Promise<string> {
     const systemPrompt = `Kamu adalah asisten yang membantu analisis data statistik.
     Berikan interpretasi dan insight dari hasil analisis ${analysisType}.`
 
