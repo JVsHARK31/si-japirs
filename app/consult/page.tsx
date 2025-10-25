@@ -155,68 +155,26 @@ export default function ConsultPage() {
       }
 
       setMessages(prev => [...prev, assistantMessage])
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error sending message:', error)
       
-      // Mock response for demo
-      const mockResponse = generateMockResponse(messageContent, mode)
+      // Show error message to user
+      const errorMessage = error.response?.data?.error || error.message || 'Terjadi kesalahan saat menghubungi AI. Silakan coba lagi.'
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: mockResponse,
+        content: `❌ Error: ${errorMessage}\n\nSilakan coba lagi atau periksa koneksi internet Anda.`,
         timestamp: new Date()
       }
       setMessages(prev => [...prev, assistantMessage])
+      toast.error('Gagal mengirim pesan ke AI')
     } finally {
       setLoading(false)
       inputRef.current?.focus()
     }
   }
 
-  const generateMockResponse = (question: string, mode: string) => {
-    const responses = {
-      general: `Terima kasih atas pertanyaan Anda tentang "${question}". 
 
-Berdasarkan pemahaman saya, topik ini sangat relevan dalam konteks akademik. Berikut beberapa poin penting yang perlu dipertimbangkan:
-
-1. **Aspek Teoretis**: Penting untuk memahami dasar teori yang mendasari topik ini
-2. **Aplikasi Praktis**: Bagaimana konsep ini dapat diterapkan dalam penelitian atau praktik
-3. **Perkembangan Terkini**: Trend dan inovasi terbaru dalam bidang ini
-
-Apakah ada aspek spesifik yang ingin Anda dalami lebih lanjut?`,
-      
-      eli5: `Oke, saya akan jelaskan "${question}" dengan cara yang sangat sederhana! 😊
-
-Bayangkan begini: Ini seperti ketika kamu main puzzle. Setiap potongan puzzle punya tempat khusus, dan kalau semua potongan sudah tepat di tempatnya, kamu bisa lihat gambar lengkapnya!
-
-Dalam konteks akademik, konsep ini bekerja dengan cara yang mirip:
-- Ada bagian-bagian kecil yang perlu dipahami dulu
-- Setiap bagian punya peran penting
-- Kalau digabungkan, semuanya jadi masuk akal!
-
-Mudah kan? Ada yang masih bingung? Tanya aja ya! 🤔`,
-      
-      academic: `Menanggapi pertanyaan Anda mengenai "${question}", saya akan memberikan analisis komprehensif berdasarkan literatur akademik terkini.
-
-**Tinjauan Teoretis:**
-Berdasarkan Smith et al. (2023), konsep ini pertama kali diperkenalkan dalam konteks penelitian empiris yang menunjukkan korelasi signifikan (p < 0.05) antara variabel terkait.
-
-**Metodologi Penelitian:**
-Pendekatan yang umum digunakan meliputi:
-- Analisis kuantitatif dengan regresi multivariat
-- Studi longitudinal untuk mengukur dampak jangka panjang
-- Meta-analisis dari studi-studi terdahulu
-
-**Implikasi dan Rekomendasi:**
-Hasil penelitian menunjukkan bahwa implementasi konsep ini dapat meningkatkan efektivitas hingga 40% (Johnson, 2024). Namun, perlu dipertimbangkan faktor-faktor kontekstual yang dapat mempengaruhi generalisasi temuan.
-
-**Referensi:**
-- Smith, J., et al. (2023). *Journal of Academic Research*, 45(3), 234-256.
-- Johnson, K. (2024). *International Review of Studies*, 12(1), 78-92.`
-    }
-
-    return responses[mode as keyof typeof responses] || responses.general
-  }
 
   const copyMessage = (content: string) => {
     navigator.clipboard.writeText(content)

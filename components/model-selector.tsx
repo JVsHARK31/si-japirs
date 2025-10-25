@@ -140,9 +140,10 @@ export default function ModelSelector({ onModelChange, className = '' }: ModelSe
 
         <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">
           <div className="space-y-1">
-            <p><strong>Claude Sonnet 4.5:</strong> Model terbaik untuk tugas umum dan akademis</p>
-            <p><strong>Claude Sonnet 4.5 (Thinking):</strong> Model dengan kemampuan reasoning tinggi</p>
-            <p><strong>GPT-5:</strong> Model generasi terbaru dengan kemampuan advanced</p>
+            <p><strong>GPT-5:</strong> Model AI terbaru dan paling canggih</p>
+            <p><strong>GPT-4o:</strong> Model optimal dengan kecerdasan tinggi</p>
+            <p><strong>DeepSeek R1:</strong> Khusus untuk reasoning dan logika kompleks</p>
+            <p><strong>GPT-3.5 Turbo:</strong> Cepat dan efisien untuk tugas sederhana</p>
           </div>
         </div>
       </div>

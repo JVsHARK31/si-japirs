@@ -2,11 +2,14 @@
 
 ## ✨ Fitur Utama
 
-Sistem AI Si-JAPIRS sekarang menggunakan **ChatAnywhere API** dengan 3 pilihan model AI canggih:
+Sistem AI Si-JAPIRS menggunakan **ChatAnywhere API** dengan 6 model AI yang tersedia (Free Tier):
 
-1. **Claude Sonnet 4.5** - Model terbaik untuk tugas umum
-2. **Claude Sonnet 4.5 (Thinking)** - Model dengan kemampuan reasoning tinggi  
-3. **GPT-5** - Model generasi terbaru dengan kemampuan advanced
+1. **GPT-5** - Model AI terbaru dan paling canggih (5 request/hari)
+2. **GPT-4o** - Model optimal dengan kecerdasan tinggi  
+3. **GPT-4o Mini** - Versi ringan GPT-4o
+4. **DeepSeek R1** - Khusus untuk reasoning dan logika kompleks
+5. **DeepSeek V3** - Model umum dengan performa baik
+6. **GPT-3.5 Turbo** - Cepat dan efisien (unlimited)
 
 ## 🚀 Cara Penggunaan
 
@@ -52,7 +55,7 @@ python test_chatanywhere.py
 import { aiClient } from '@/lib/ai-client'
 
 // Ganti model
-aiClient.setModel('claude-thinking')
+aiClient.setModel('gpt-5') // atau 'gpt-4o', 'deepseek-r1', 'gpt-3.5'
 
 // Chat dengan AI
 const response = await aiClient.chatCompletion({
@@ -60,7 +63,7 @@ const response = await aiClient.chatCompletion({
     { role: 'user', content: 'Jelaskan konsep machine learning' }
   ],
   mode: 'eli5',  // atau 'general', 'academic'
-  model: 'gpt-5' // opsional
+  model: 'gpt-5' // opsional, akan fallback ke gpt-3.5 jika limit tercapai
 })
 ```
 
@@ -75,7 +78,7 @@ client = openai.OpenAI(
 )
 
 response = client.chat.completions.create(
-    model="claude-sonnet-4-5-20250929",
+    model="gpt-5",  # atau "gpt-4o", "gpt-3.5-turbo", "deepseek-r1"
     messages=[
         {"role": "user", "content": "Halo!"}
     ]
@@ -86,26 +89,33 @@ print(response.choices[0].message.content)
 
 ## 🎯 Pemilihan Model
 
-### Claude Sonnet 4.5 (`claude-sonnet`)
+### GPT-5 (`gpt-5`) ⭐ Recommended
 ✅ **Cocok untuk:**
-- Tugas akademik umum
-- Penulisan artikel dan makalah
-- Analisis dan ringkasan teks
-- Pertanyaan sehari-hari
+- Tugas kompleks dan analisis mendalam
+- Penulisan akademik berkualitas tinggi
+- Research dan synthesis
+- **Limit:** 5 request per hari (otomatis fallback ke GPT-3.5)
 
-### Claude Sonnet 4.5 Thinking (`claude-thinking`)
+### GPT-4o (`gpt-4o`)
 ✅ **Cocok untuk:**
-- Problem solving kompleks
+- Tugas yang memerlukan kecerdasan tinggi
+- Problem solving
+- Analisis data
+- Penulisan formal
+
+### DeepSeek R1 (`deepseek-r1`)
+✅ **Cocok untuk:**
 - Soal matematika dan logika
-- Analisis mendalam
+- Step-by-step reasoning
+- Problem solving kompleks
 - Debugging kode
 
-### GPT-5 (`gpt-5`)
+### GPT-3.5 Turbo (`gpt-3.5`)
 ✅ **Cocok untuk:**
-- Tugas kreatif
-- Generasi konten advanced
-- Research synthesis
-- Inovasi dan brainstorming
+- Tugas umum dan sederhana
+- Chat casual
+- **Unlimited requests** - tidak ada batasan
+- Fallback otomatis dari model lain
 
 ## 🛠️ API Endpoints
 
@@ -118,7 +128,7 @@ GET /api/ai/models
 ```http
 POST /api/ai/models
 {
-  "model": "claude-sonnet" | "claude-thinking" | "gpt-5"
+  "model": "gpt-5" | "gpt-4o" | "gpt-3.5" | "deepseek-r1" | "deepseek-v3"
 }
 ```
 
@@ -128,7 +138,7 @@ POST /api/ai/chat
 {
   "messages": [...],
   "mode": "general" | "eli5" | "academic",
-  "model": "claude-sonnet"  // opsional
+  "model": "gpt-5"  // opsional, default: gpt-5
 }
 ```
 
@@ -136,8 +146,13 @@ POST /api/ai/chat
 
 - **Timeout:** 60 detik per request
 - **Max Tokens:** 2000 tokens default
-- **Rate Limit:** Tergantung API key
-- **Error Handling:** Otomatis dengan retry logic
+- **Rate Limits (Free Tier):**
+  - GPT-5: 5 request per hari
+  - GPT-4o: Limited
+  - GPT-3.5 Turbo: Unlimited
+  - DeepSeek models: Limited
+- **Auto Fallback:** Jika model premium mencapai limit, otomatis switch ke GPT-3.5
+- **Error Handling:** Otomatis dengan retry logic dan fallback mechanism
 
 ## 🔧 Troubleshooting
 
@@ -147,12 +162,15 @@ POST /api/ai/chat
 OPENAI_API_KEY=sk-POcyyRhXrzVwwPedbzrHqfQgNNqslFSXTcgR3KEakZpdzzte
 ```
 
-### Error: "Rate limit exceeded"
-- Tunggu beberapa saat sebelum request berikutnya
-- Gunakan delay antar request
+### Error: "Rate limit exceeded" / "限制每日5次请求"
+- GPT-5 memiliki limit 5x per hari pada free tier
+- Sistem akan otomatis fallback ke GPT-3.5 Turbo
+- Tunggu hingga jam 00:00 untuk reset limit harian
+- Atau gunakan model lain seperti GPT-3.5 Turbo (unlimited)
 
 ### Error: "Model not found"  
 - Pastikan menggunakan nama model yang benar
+- Model tersedia: gpt-5, gpt-4o, gpt-3.5, deepseek-r1, deepseek-v3
 - Cek typo pada nama model
 
 ## 📊 Status & Monitoring
@@ -180,10 +198,15 @@ Lihat [CHATANYWHERE_AI_SETUP.md](./CHATANYWHERE_AI_SETUP.md) untuk dokumentasi t
 
 ## 💡 Tips
 
-1. **Hemat Token:** Gunakan prompt yang jelas dan spesifik
-2. **Model Switching:** Ganti model sesuai kebutuhan task
-3. **Error Handling:** Selalu handle error di production
-4. **Caching:** Implementasi caching untuk response yang sama
+1. **Model Selection Strategy:**
+   - Gunakan GPT-5 untuk tugas penting (ingat limit 5x/hari)
+   - GPT-3.5 Turbo untuk chat casual (unlimited)
+   - DeepSeek R1 untuk matematika dan logika
+2. **Hemat Quota:** 
+   - Mulai dengan GPT-3.5 untuk testing
+   - Simpan GPT-5 untuk tugas final/penting
+3. **Error Handling:** Sistem sudah ada auto-fallback ke GPT-3.5
+4. **Best Practice:** Test dulu dengan model gratis sebelum deploy
 
 ## 🆘 Support
 

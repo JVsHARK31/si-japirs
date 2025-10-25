@@ -4,11 +4,14 @@ import axios from 'axios'
 const CHATANYWHERE_API_URL = process.env.OPENAI_API_BASE || 'https://api.chatanywhere.tech/v1'
 const CHATANYWHERE_API_KEY = process.env.OPENAI_API_KEY || 'sk-POcyyRhXrzVwwPedbzrHqfQgNNqslFSXTcgR3KEakZpdzzte'
 
-// Available models for ChatAnywhere
+// Available models for ChatAnywhere (Free tier)
 export const AVAILABLE_MODELS = {
-  'claude-sonnet': 'claude-sonnet-4-5-20250929',
-  'claude-thinking': 'claude-sonnet-4-5-20250929-thinking',
-  'gpt-5': 'gpt-5'
+  'gpt-3.5': 'gpt-3.5-turbo',
+  'gpt-4o-mini': 'gpt-4o-mini',
+  'gpt-4o': 'gpt-4o',
+  'gpt-5': 'gpt-5',
+  'deepseek-v3': 'deepseek-v3',
+  'deepseek-r1': 'deepseek-r1'
 } as const
 
 export type ModelType = keyof typeof AVAILABLE_MODELS
@@ -34,8 +37,8 @@ class AIClient {
   constructor() {
     this.apiUrl = CHATANYWHERE_API_URL
     this.apiKey = CHATANYWHERE_API_KEY
-    // Default to claude-sonnet
-    this.currentModel = AVAILABLE_MODELS['claude-sonnet']
+    // Default to gpt-5 (most advanced free model)
+    this.currentModel = AVAILABLE_MODELS['gpt-5']
   }
 
   // Method to switch models
@@ -61,9 +64,12 @@ class AIClient {
   // Get display name for model
   getModelDisplayName(modelType: ModelType): string {
     const names = {
-      'claude-sonnet': 'Claude Sonnet 4.5',
-      'claude-thinking': 'Claude Sonnet 4.5 (Thinking)',
-      'gpt-5': 'GPT-5'
+      'gpt-3.5': 'GPT-3.5 Turbo',
+      'gpt-4o-mini': 'GPT-4o Mini',
+      'gpt-4o': 'GPT-4o',
+      'gpt-5': 'GPT-5 (Latest)',
+      'deepseek-v3': 'DeepSeek V3',
+      'deepseek-r1': 'DeepSeek R1 (Reasoning)'
     }
     return names[modelType] || modelType
   }
@@ -109,14 +115,28 @@ class AIClient {
       
       if (error.response) {
         // API returned an error
+        const errorMessage = error.response.data?.error?.message || error.message
+        
         if (error.response.status === 401) {
           throw new Error('Invalid API key. Please check your ChatAnywhere API key.')
-        } else if (error.response.status === 429) {
-          throw new Error('Rate limit exceeded. Please try again later.')
+        } else if (error.response.status === 429 || errorMessage.includes('限制每日')) {
+          // Rate limit or daily limit exceeded
+          console.log('Rate limit hit, trying fallback model...')
+          
+          // Try fallback to a different model
+          if (modelToUse === 'gpt-5' && options.model !== 'gpt-3.5') {
+            console.log('Falling back to GPT-3.5 Turbo...')
+            return this.generateCompletion({ ...options, model: 'gpt-3.5' })
+          } else if (modelToUse === 'gpt-4o' && options.model !== 'gpt-3.5') {
+            console.log('Falling back to GPT-3.5 Turbo...')
+            return this.generateCompletion({ ...options, model: 'gpt-3.5' })
+          }
+          
+          throw new Error(`Rate limit reached. ${errorMessage}`)
         } else if (error.response.status === 503) {
           throw new Error('AI service is temporarily unavailable. Please try again later.')
         } else {
-          throw new Error(`AI service error: ${error.response.data?.error?.message || error.message}`)
+          throw new Error(`AI service error: ${errorMessage}`)
         }
       } else if (error.request) {
         // Request was made but no response received
