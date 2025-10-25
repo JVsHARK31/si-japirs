@@ -29,6 +29,8 @@ import {
 import toast from 'react-hot-toast'
 import axios from 'axios'
 import { cn } from '@/lib/utils'
+import ModelSelector from '@/components/model-selector'
+import { ModelType } from '@/lib/ai-client'
 
 interface Message {
   id: string
@@ -88,6 +90,7 @@ export default function ConsultPage() {
   const [loading, setLoading] = useState(false)
   const [mode, setMode] = useState<'general' | 'eli5' | 'academic'>('general')
   const [showModeSelector, setShowModeSelector] = useState(false)
+  const [selectedModel, setSelectedModel] = useState<ModelType | undefined>(undefined)
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -140,7 +143,8 @@ export default function ConsultPage() {
           role: m.role,
           content: m.content
         })),
-        mode
+        mode,
+        model: selectedModel
       })
 
       const assistantMessage: Message = {
@@ -292,6 +296,21 @@ Hasil penelitian menunjukkan bahwa implementasi konsep ini dapat meningkatkan ef
                   </div>
                 </button>
               ))}
+            </CardContent>
+          </Card>
+
+          {/* AI Model Selector */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg">Model AI</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ModelSelector 
+                onModelChange={(model) => {
+                  setSelectedModel(model)
+                  toast.success(`Model berhasil diganti ke ${model}`)
+                }}
+              />
             </CardContent>
           </Card>
 

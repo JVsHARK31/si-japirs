@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { messages, mode } = await request.json()
+    const { messages, mode, model } = await request.json()
 
     if (!messages || messages.length === 0) {
       return NextResponse.json(
@@ -27,6 +27,7 @@ export async function POST(request: NextRequest) {
     const content = await aiClient.chatCompletion({
       messages,
       mode: mode || 'general',
+      model: model,
     })
 
     // Save chat to database

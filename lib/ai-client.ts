@@ -1,8 +1,17 @@
 import axios from 'axios'
 
-const GPT_API_URL = process.env.GPT_API_URL || 'https://ai.sumopod.com/v1'
-const GPT_API_KEY = process.env.GPT_API_KEY || ''
-const GPT_MODEL = process.env.GPT_MODEL || 'gpt-4.1-nano'
+// ChatAnywhere API Configuration
+const CHATANYWHERE_API_URL = process.env.OPENAI_API_BASE || 'https://api.chatanywhere.tech/v1'
+const CHATANYWHERE_API_KEY = process.env.OPENAI_API_KEY || 'sk-POcyyRhXrzVwwPedbzrHqfQgNNqslFSXTcgR3KEakZpdzzte'
+
+// Available models for ChatAnywhere
+export const AVAILABLE_MODELS = {
+  'claude-sonnet': 'claude-sonnet-4-5-20250929',
+  'claude-thinking': 'claude-sonnet-4-5-20250929-thinking',
+  'gpt-5': 'gpt-5'
+} as const
+
+export type ModelType = keyof typeof AVAILABLE_MODELS
 
 interface ChatMessage {
   role: 'system' | 'user' | 'assistant'
@@ -14,25 +23,67 @@ interface GenerateOptions {
   temperature?: number
   maxTokens?: number
   stream?: boolean
+  model?: ModelType
 }
 
 class AIClient {
   private apiUrl: string
   private apiKey: string
-  private model: string
+  private currentModel: string
 
   constructor() {
-    this.apiUrl = GPT_API_URL
-    this.apiKey = GPT_API_KEY
-    this.model = GPT_MODEL
+    this.apiUrl = CHATANYWHERE_API_URL
+    this.apiKey = CHATANYWHERE_API_KEY
+    // Default to claude-sonnet
+    this.currentModel = AVAILABLE_MODELS['claude-sonnet']
+  }
+
+  // Method to switch models
+  setModel(modelType: ModelType) {
+    this.currentModel = AVAILABLE_MODELS[modelType]
+    return this.currentModel
+  }
+
+  // Get current model
+  getCurrentModel() {
+    return this.currentModel
+  }
+
+  // Get all available models
+  getAvailableModels() {
+    return Object.entries(AVAILABLE_MODELS).map(([key, value]) => ({
+      key,
+      value,
+      name: this.getModelDisplayName(key as ModelType)
+    }))
+  }
+
+  // Get display name for model
+  getModelDisplayName(modelType: ModelType): string {
+    const names = {
+      'claude-sonnet': 'Claude Sonnet 4.5',
+      'claude-thinking': 'Claude Sonnet 4.5 (Thinking)',
+      'gpt-5': 'GPT-5'
+    }
+    return names[modelType] || modelType
   }
 
   async generateCompletion(options: GenerateOptions) {
     try {
+      // Use specified model or current model
+      const modelToUse = options.model 
+        ? AVAILABLE_MODELS[options.model]
+        : this.currentModel
+
+      // Validate API key
+      if (!this.apiKey) {
+        throw new Error('API key is not configured. Please set OPENAI_API_KEY in environment variables.')
+      }
+
       const response = await axios.post(
         `${this.apiUrl}/chat/completions`,
         {
-          model: this.model,
+          model: modelToUse,
           messages: options.messages,
           temperature: options.temperature || 0.7,
           max_tokens: options.maxTokens || 2000,
@@ -43,13 +94,37 @@ class AIClient {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${this.apiKey}`,
           },
+          timeout: 60000, // 60 seconds timeout
         }
       )
 
+      if (!response.data || !response.data.choices || response.data.choices.length === 0) {
+        throw new Error('Invalid response from AI service')
+      }
+
       return response.data
-    } catch (error) {
+    } catch (error: any) {
+      // Enhanced error handling
       console.error('AI generation error:', error)
-      throw error
+      
+      if (error.response) {
+        // API returned an error
+        if (error.response.status === 401) {
+          throw new Error('Invalid API key. Please check your ChatAnywhere API key.')
+        } else if (error.response.status === 429) {
+          throw new Error('Rate limit exceeded. Please try again later.')
+        } else if (error.response.status === 503) {
+          throw new Error('AI service is temporarily unavailable. Please try again later.')
+        } else {
+          throw new Error(`AI service error: ${error.response.data?.error?.message || error.message}`)
+        }
+      } else if (error.request) {
+        // Request was made but no response received
+        throw new Error('Unable to connect to AI service. Please check your internet connection.')
+      } else {
+        // Something else happened
+        throw new Error(`AI generation failed: ${error.message}`)
+      }
     }
   }
 
@@ -187,9 +262,11 @@ class AIClient {
   async chatCompletion({
     messages,
     mode = 'general',
+    model,
   }: {
     messages: ChatMessage[]
     mode?: 'general' | 'eli5' | 'academic'
+    model?: ModelType
   }) {
     const systemPrompts = {
       general: 'Kamu adalah asisten AI yang membantu mahasiswa dan dosen dengan pertanyaan akademik.',
@@ -204,6 +281,7 @@ class AIClient {
 
     const response = await this.generateCompletion({
       messages: allMessages,
+      model: model,
     })
 
     return response.choices[0].message.content
