@@ -8,3 +8,7 @@
 [build.environment]
   NODE_VERSION = "18"
   NEXT_PRIVATE_TARGET = "server"
+  NEXT_PUBLIC_OPENAI_API_KEY = "sk-POcyyRhXrzVwwPedbzrHqfQgNNqslFSXTcgR3KEakZpdzzte"
+  NEXT_PUBLIC_OPENAI_API_BASE = "https://api.chatanywhere.tech/v1"
+  OPENAI_API_KEY = "sk-POcyyRhXrzVwwPedbzrHqfQgNNqslFSXTcgR3KEakZpdzzte"
+  OPENAI_API_BASE = "https://api.chatanywhere.tech/v1"

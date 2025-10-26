@@ -1,8 +1,12 @@
 import axios from 'axios'
 
 // ChatAnywhere API Configuration
-const CHATANYWHERE_API_URL = process.env.OPENAI_API_BASE || 'https://api.chatanywhere.tech/v1'
-const CHATANYWHERE_API_KEY = process.env.OPENAI_API_KEY || 'sk-POcyyRhXrzVwwPedbzrHqfQgNNqslFSXTcgR3KEakZpdzzte'
+// Use NEXT_PUBLIC_ prefix for client-side environment variables
+const CHATANYWHERE_API_URL = process.env.NEXT_PUBLIC_OPENAI_API_BASE || process.env.OPENAI_API_BASE || 'https://api.chatanywhere.tech/v1'
+const CHATANYWHERE_API_KEY = process.env.NEXT_PUBLIC_OPENAI_API_KEY || process.env.OPENAI_API_KEY || 'sk-POcyyRhXrzVwwPedbzrHqfQgNNqslFSXTcgR3KEakZpdzzte'
+
+// Hardcoded fallback for production if env vars fail
+const FALLBACK_API_KEY = 'sk-POcyyRhXrzVwwPedbzrHqfQgNNqslFSXTcgR3KEakZpdzzte'
 
 // Available models for ChatAnywhere (Free tier)
 export const AVAILABLE_MODELS = {
@@ -67,7 +71,15 @@ class AIClient {
 
   constructor() {
     this.apiUrl = CHATANYWHERE_API_URL
-    this.apiKey = CHATANYWHERE_API_KEY
+    // Ensure API key is always set, use multiple fallbacks
+    this.apiKey = CHATANYWHERE_API_KEY || FALLBACK_API_KEY
+    
+    // Log for debugging (remove in production)
+    if (!this.apiKey || this.apiKey === 'undefined') {
+      console.error('WARNING: API key not properly configured, using fallback')
+      this.apiKey = FALLBACK_API_KEY
+    }
+    
     // Default to gpt-3.5 (unlimited requests, most reliable)
     this.currentModel = AVAILABLE_MODELS['gpt-3.5']
   }
@@ -112,9 +124,15 @@ class AIClient {
       : this.currentModel
 
     try {
-      // Validate API key
+      // Validate API key - use fallback if needed
+      if (!this.apiKey || this.apiKey === 'undefined' || this.apiKey.length < 10) {
+        console.warn('API key validation failed, using fallback')
+        this.apiKey = FALLBACK_API_KEY
+      }
+      
+      // Final check
       if (!this.apiKey) {
-        throw new Error('API key is not configured. Please set OPENAI_API_KEY in environment variables.')
+        throw new Error('API key is not configured. Please contact support.')
       }
 
       const response = await axios.post(
@@ -149,6 +167,12 @@ class AIClient {
         const errorMessage = error.response.data?.error?.message || error.message
         
         if (error.response.status === 401) {
+          // Try with fallback key if current key fails
+          if (this.apiKey !== FALLBACK_API_KEY) {
+            console.log('API key failed, retrying with fallback key...')
+            this.apiKey = FALLBACK_API_KEY
+            return this.generateCompletion(options) // Retry with fallback
+          }
           throw new Error('Invalid API key. Please check your ChatAnywhere API key.')
         } else if (error.response.status === 429 || errorMessage.includes('限制每日')) {
           // Rate limit or daily limit exceeded

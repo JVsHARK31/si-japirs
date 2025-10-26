@@ -83,10 +83,14 @@ export async function POST(request: NextRequest) {
     
     if (error.message?.includes('limit')) {
       errorMessage = 'Model rate limit reached. Please try using GPT-3.5 Turbo or wait until tomorrow.'
-    } else if (error.message?.includes('API key')) {
-      errorMessage = 'API configuration error. Please contact support.'
+    } else if (error.message?.includes('API key') || error.message?.includes('401')) {
+      // More specific API key error
+      errorMessage = 'API authentication failed. The service is being fixed. Please try again in a moment or use GPT-3.5 Turbo model.'
+      console.error('API Key Error - Check environment variables')
     } else if (error.message?.includes('connect')) {
       errorMessage = 'Unable to connect to AI service. Please check your internet connection.'
+    } else if (error.message?.includes('Invalid API key')) {
+      errorMessage = 'API service temporarily unavailable. Please try again in a moment.'
     } else if (error.message) {
       errorMessage = error.message
     }
