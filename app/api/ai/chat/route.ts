@@ -24,13 +24,39 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const content = await aiClient.chatCompletion({
-      messages,
-      mode: mode || 'general',
-      model: model,
-    })
+    let content: string
+    let usedModel = model
+    
+    try {
+      // Try with requested model first
+      content = await aiClient.chatCompletion({
+        messages,
+        mode: mode || 'general',
+        model: model,
+      })
+    } catch (aiError: any) {
+      console.error('AI Chat Error:', aiError)
+      
+      // If rate limit error and not already using GPT-3.5, try fallback
+      if (aiError.message?.includes('limit') && model !== 'gpt-3.5') {
+        console.log('Rate limit hit, falling back to GPT-3.5 Turbo...')
+        try {
+          content = await aiClient.chatCompletion({
+            messages,
+            mode: mode || 'general',
+            model: 'gpt-3.5',
+          })
+          usedModel = 'gpt-3.5'
+        } catch (fallbackError) {
+          console.error('Fallback to GPT-3.5 also failed:', fallbackError)
+          throw fallbackError
+        }
+      } else {
+        throw aiError
+      }
+    }
 
-    // Save chat to database
+    // Save chat to database (optional, continue if fails)
     try {
       await prisma.chat.create({
         data: {
@@ -45,11 +71,28 @@ export async function POST(request: NextRequest) {
       // Continue even if save fails
     }
 
-    return NextResponse.json({ content })
-  } catch (error) {
+    return NextResponse.json({ 
+      content,
+      usedModel // Return which model was actually used
+    })
+  } catch (error: any) {
     console.error('Error in chat API:', error)
+    
+    // Provide more specific error messages
+    let errorMessage = 'Failed to process chat request'
+    
+    if (error.message?.includes('limit')) {
+      errorMessage = 'Model rate limit reached. Please try using GPT-3.5 Turbo or wait until tomorrow.'
+    } else if (error.message?.includes('API key')) {
+      errorMessage = 'API configuration error. Please contact support.'
+    } else if (error.message?.includes('connect')) {
+      errorMessage = 'Unable to connect to AI service. Please check your internet connection.'
+    } else if (error.message) {
+      errorMessage = error.message
+    }
+    
     return NextResponse.json(
-      { error: 'Failed to process chat request' },
+      { error: errorMessage },
       { status: 500 }
     )
   }

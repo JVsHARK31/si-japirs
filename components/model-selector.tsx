@@ -140,10 +140,18 @@ export default function ModelSelector({ onModelChange, className = '' }: ModelSe
 
         <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">
           <div className="space-y-1">
-            <p><strong>GPT-5:</strong> Model AI terbaru dan paling canggih</p>
-            <p><strong>GPT-4o:</strong> Model optimal dengan kecerdasan tinggi</p>
-            <p><strong>DeepSeek R1:</strong> Khusus untuk reasoning dan logika kompleks</p>
-            <p><strong>GPT-3.5 Turbo:</strong> Cepat dan efisien untuk tugas sederhana</p>
+            <p className="text-green-600 font-semibold">
+              <strong>GPT-3.5 Turbo:</strong> ✅ UNLIMITED - Recommended untuk daily use
+            </p>
+            <p className="text-orange-600">
+              <strong>GPT-5:</strong> ⚠️ 5x/hari - Model paling canggih (use wisely)
+            </p>
+            <p className="text-orange-600">
+              <strong>GPT-4o:</strong> ⚠️ Limited - Kecerdasan tinggi
+            </p>
+            <p className="text-blue-600">
+              <strong>DeepSeek R1:</strong> Untuk matematika & logika
+            </p>
           </div>
         </div>
       </div>

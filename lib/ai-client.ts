@@ -68,8 +68,8 @@ class AIClient {
   constructor() {
     this.apiUrl = CHATANYWHERE_API_URL
     this.apiKey = CHATANYWHERE_API_KEY
-    // Default to gpt-5 (most advanced free model)
-    this.currentModel = AVAILABLE_MODELS['gpt-5']
+    // Default to gpt-3.5 (unlimited requests, most reliable)
+    this.currentModel = AVAILABLE_MODELS['gpt-3.5']
   }
 
   // Method to switch models

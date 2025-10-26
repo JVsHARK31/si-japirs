@@ -90,7 +90,7 @@ export default function ConsultPage() {
   const [loading, setLoading] = useState(false)
   const [mode, setMode] = useState<'general' | 'eli5' | 'academic'>('general')
   const [showModeSelector, setShowModeSelector] = useState(false)
-  const [selectedModel, setSelectedModel] = useState<ModelType | undefined>(undefined)
+  const [selectedModel, setSelectedModel] = useState<ModelType | undefined>('gpt-3.5') // Default to GPT-3.5 (unlimited)
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -105,7 +105,7 @@ export default function ConsultPage() {
         {
           id: '1',
           role: 'assistant',
-          content: `Halo! Saya Si-JAPIRS AI Assistant\n\nSaya siap membantu Anda dengan pertanyaan seputar akademik, penelitian, penulisan ilmiah, dan topik pembelajaran lainnya. Silakan tanyakan apa saja!`,
+          content: `Halo! Saya Si-JAPIRS AI Assistant 🤖\n\nSaya siap membantu Anda dengan pertanyaan seputar akademik, penelitian, penulisan ilmiah, dan topik pembelajaran lainnya.\n\n💡 Tip: Saat ini menggunakan GPT-3.5 Turbo (unlimited requests). Untuk hasil lebih advanced, coba GPT-5 (limit 5x/hari) dari dropdown Model AI.\n\nSilakan tanyakan apa saja!`,
           timestamp: new Date()
         }
       ])
@@ -155,19 +155,37 @@ export default function ConsultPage() {
       }
 
       setMessages(prev => [...prev, assistantMessage])
+      
+      // If a different model was used (fallback), notify user
+      if (response.data.usedModel && response.data.usedModel !== selectedModel) {
+        toast.info(`Menggunakan ${response.data.usedModel} karena ${selectedModel} mencapai limit`)
+      }
     } catch (error: any) {
       console.error('Error sending message:', error)
       
-      // Show error message to user
-      const errorMessage = error.response?.data?.error || error.message || 'Terjadi kesalahan saat menghubungi AI. Silakan coba lagi.'
+      // Get error message from response or use default
+      const errorMessage = error.response?.data?.error || error.message || 'Terjadi kesalahan saat menghubungi AI.'
+      
+      // Suggest user to switch to GPT-3.5 if rate limit error
+      let suggestion = ''
+      if (errorMessage.includes('limit') && selectedModel !== 'gpt-3.5') {
+        suggestion = '\n\n💡 Tip: Coba gunakan model GPT-3.5 Turbo (unlimited) dari dropdown Model AI di sidebar.'
+      }
+      
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: `❌ Error: ${errorMessage}\n\nSilakan coba lagi atau periksa koneksi internet Anda.`,
+        content: `❌ Error: ${errorMessage}${suggestion}`,
         timestamp: new Date()
       }
       setMessages(prev => [...prev, assistantMessage])
-      toast.error('Gagal mengirim pesan ke AI')
+      
+      // Show different toast based on error type
+      if (errorMessage.includes('limit')) {
+        toast.error('Model mencapai limit harian. Gunakan GPT-3.5 Turbo!')
+      } else {
+        toast.error('Gagal mengirim pesan ke AI')
+      }
     } finally {
       setLoading(false)
       inputRef.current?.focus()
@@ -196,7 +214,7 @@ export default function ConsultPage() {
       {
         id: '1',
         role: 'assistant',
-        content: `Halo! Saya Si-JAPIRS AI Assistant\n\nSaya siap membantu Anda dengan pertanyaan seputar akademik, penelitian, penulisan ilmiah, dan topik pembelajaran lainnya. Silakan tanyakan apa saja!`,
+        content: `Halo! Saya Si-JAPIRS AI Assistant 🤖\n\nSaya siap membantu Anda dengan pertanyaan seputar akademik, penelitian, penulisan ilmiah, dan topik pembelajaran lainnya.\n\n💡 Tip: Saat ini menggunakan GPT-3.5 Turbo (unlimited requests). Untuk hasil lebih advanced, coba GPT-5 (limit 5x/hari) dari dropdown Model AI.\n\nSilakan tanyakan apa saja!`,
         timestamp: new Date()
       }
     ])
