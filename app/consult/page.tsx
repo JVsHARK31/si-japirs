@@ -158,7 +158,10 @@ export default function ConsultPage() {
       
       // If a different model was used (fallback), notify user
       if (response.data.usedModel && response.data.usedModel !== selectedModel) {
-        toast.info(`Menggunakan ${response.data.usedModel} karena ${selectedModel} mencapai limit`)
+        toast(`Menggunakan ${response.data.usedModel} karena ${selectedModel} mencapai limit`, {
+          icon: 'ℹ️',
+          duration: 4000,
+        })
       }
     } catch (error: any) {
       console.error('Error sending message:', error)
