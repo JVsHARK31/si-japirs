@@ -64,7 +64,7 @@ interface ModelInfo {
   name: string
 }
 
-class AIClient {
+export class AIClient {
   private apiUrl: string
   private apiKey: string
   private currentModel: string
