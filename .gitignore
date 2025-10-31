@@ -27,6 +27,8 @@ yarn-error.log*
 
 # local env files
 .env*.local
+NETLIFY_ENV_VARS.txt
+VERCEL_ENV_VARS.txt
 .env
 .env.production
 env-export.json

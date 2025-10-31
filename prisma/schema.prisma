@@ -48,15 +48,16 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  accounts   Account[]
-  sessions   Session[]
-  documents  Document[]
-  uploads    Upload[]
-  citations  Citation[]
-  jobs       Job[]
-  tasks      Task[]
-  chats      Chat[]
-  statistics Statistic[]
+  accounts          Account[]
+  sessions          Session[]
+  documents         Document[]
+  uploads           Upload[]
+  citations         Citation[]
+  jobs              Job[]
+  tasks             Task[]
+  chats             Chat[]
+  statistics        Statistic[]
+  exerciseSessions  ExerciseSession[]
 }
 
 model VerificationToken {
@@ -115,10 +116,11 @@ model Citation {
 model Job {
   id          String   @id @default(cuid())
   userId      String
-  type        String   // summarize, generate, plagiarism, stats, slides, etc.
+  type        String   // summarize, generate, plagiarism, stats, slides, exercise, etc.
   status      String   @default("queued") // queued, running, completed, failed
   documentId  String?  // Reference to document ID
   uploadId    String?  // Reference to upload ID
+  exerciseSessionId String? // Reference to exercise session
   outputRef   String?  // Reference to result
   input       Json?    // Input parameters
   output      Json?    // Output results
@@ -128,9 +130,10 @@ model Job {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  document  Document? @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  upload    Upload?   @relation(fields: [uploadId], references: [id], onDelete: Cascade)
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  document        Document?         @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  upload          Upload?           @relation(fields: [uploadId], references: [id], onDelete: Cascade)
+  exerciseSession ExerciseSession?  @relation(fields: [exerciseSessionId], references: [id], onDelete: Cascade)
 }
 
 model Task {
@@ -172,4 +175,62 @@ model Statistic {
   createdAt   DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ExerciseSession {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  subject   String?  // math, science, programming, language, etc.
+  status    String   @default("processing") // processing, completed, failed
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user     User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problems ExerciseProblem[]
+  jobs     Job[]
+}
+
+model ExerciseProblem {
+  id            String   @id @default(cuid())
+  sessionId     String
+  problemText   String?  @db.Text
+  problemType   String?  // multiple_choice, essay, math, coding, short_answer
+  difficulty    String?  // easy, medium, hard
+  questionNumber Int?
+  extractedText String?  @db.Text // OCR extracted text
+  imageUrl      String?  // uploaded image URL
+  metadata      Json?    // additional problem data
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  session   ExerciseSession    @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  solutions ExerciseSolution[]
+}
+
+model ExerciseSolution {
+  id             String   @id @default(cuid())
+  problemId      String
+  solutionText   String   @db.Text
+  explanationText String?  @db.Text
+  steps          Json?    // step-by-step solution
+  confidenceScore Float?   // AI confidence 0-1
+  processingTime  Int?     // milliseconds
+  modelUsed      String?  // AI model used
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  problem      ExerciseProblem     @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  interactions ExerciseInteraction[]
+}
+
+model ExerciseInteraction {
+  id             String   @id @default(cuid())
+  solutionId     String
+  question       String   @db.Text
+  answer         String   @db.Text
+  interactionType String  // clarification, alternative, hint, follow_up
+  createdAt      DateTime @default(now())
+
+  solution ExerciseSolution @relation(fields: [solutionId], references: [id], onDelete: Cascade)
 }

@@ -9,13 +9,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { HeaderBackButton } from '@/components/back-button'
 import { Progress } from '@/components/ui/progress'
-import { 
-  FileText, 
-  BookOpen, 
-  Search, 
-  PresentationIcon, 
-  CheckCircle, 
-  BarChart3, 
+import {
+  FileText,
+  BookOpen,
+  Search,
+  PresentationIcon,
+  CheckCircle,
+  BarChart3,
   MessageSquare,
   Clock,
   Calendar,
@@ -23,7 +23,8 @@ import {
   AlertCircle,
   Plus,
   ArrowRight,
-  Loader2
+  Loader2,
+  Calculator
 } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
 
@@ -47,6 +48,7 @@ const quickActions = [
   { icon: FileText, label: 'Tulis Draft Baru', href: '/writer', color: 'text-blue-500' },
   { icon: BookOpen, label: 'Upload PDF', href: '/summarizer', color: 'text-green-500' },
   { icon: Search, label: 'Cari Referensi', href: '/research', color: 'text-purple-500' },
+  { icon: Calculator, label: 'Solve Exercises', href: '/exercises', color: 'text-orange-500' },
   { icon: MessageSquare, label: 'Chat AI', href: '/consult', color: 'text-pink-500' }
 ]
 

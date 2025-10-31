@@ -10,8 +10,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Loader2, User, Lock, Mail, Eye, EyeOff, Sparkles, Shield, Zap } from "lucide-react"
+import { Loader2, User, Lock, Mail, Eye, EyeOff, Sparkles, Shield, Zap, MessageSquare } from "lucide-react"
 import { FcGoogle } from "react-icons/fc"
+import { FaDiscord } from "react-icons/fa"
 import toast from "react-hot-toast"
 import { motion } from "framer-motion"
 
@@ -30,6 +31,18 @@ function SignInContent() {
     } catch (error) {
       console.error("Sign in error:", error)
       toast.error("Terjadi kesalahan saat login dengan Google.")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleDiscordSignIn = async () => {
+    try {
+      setIsLoading(true)
+      await signIn("discord", { callbackUrl })
+    } catch (error) {
+      console.error("Sign in error:", error)
+      toast.error("Terjadi kesalahan saat login dengan Discord.")
     } finally {
       setIsLoading(false)
     }
@@ -121,9 +134,9 @@ function SignInContent() {
                   <User className="w-4 h-4 mr-2" />
                   Username
                 </TabsTrigger>
-                <TabsTrigger value="google" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-secondary data-[state=active]:text-white">
-                  <Mail className="w-4 h-4 mr-2" />
-                  Google
+                <TabsTrigger value="social" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-secondary data-[state=active]:text-white">
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Social Login
                 </TabsTrigger>
               </TabsList>
               
@@ -203,14 +216,16 @@ function SignInContent() {
                 </form>
               </TabsContent>
               
-              <TabsContent value="google" className="space-y-4">
+              <TabsContent value="social" className="space-y-4">
                 <div className="text-center space-y-4">
                   <p className="text-sm text-muted-foreground">
-                    Masuk dengan akun Google Anda untuk akses cepat
+                    Masuk dengan akun sosial media Anda untuk akses cepat dan aman
                   </p>
+                  
+                  {/* Google Sign In Button */}
                   <Button
                     variant="outline"
-                    className="w-full border-2 hover:border-primary transition-all transform hover:scale-105"
+                    className="w-full border-2 hover:border-primary/50 hover:bg-primary/5 transition-all transform hover:scale-[1.02] group"
                     size="lg"
                     onClick={handleGoogleSignIn}
                     disabled={isLoading}
@@ -222,8 +237,29 @@ function SignInContent() {
                       </>
                     ) : (
                       <>
-                        <FcGoogle className="mr-2 h-5 w-5" />
-                        Masuk dengan Google
+                        <FcGoogle className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
+                        <span className="font-medium">Lanjutkan dengan Google</span>
+                      </>
+                    )}
+                  </Button>
+                  
+                  {/* Discord Sign In Button */}
+                  <Button
+                    variant="outline"
+                    className="w-full border-2 hover:border-[#5865F2]/50 hover:bg-[#5865F2]/5 transition-all transform hover:scale-[1.02] group"
+                    size="lg"
+                    onClick={handleDiscordSignIn}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        Menghubungkan...
+                      </>
+                    ) : (
+                      <>
+                        <FaDiscord className="mr-2 h-5 w-5 text-[#5865F2] group-hover:scale-110 transition-transform" />
+                        <span className="font-medium">Lanjutkan dengan Discord</span>
                       </>
                     )}
                   </Button>

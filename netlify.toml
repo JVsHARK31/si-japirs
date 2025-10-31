@@ -1,14 +1,28 @@
 [build]
-  command = "npm run build:full"
+  command = "npm run build"
   publish = ".next"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "20"
   NEXT_PRIVATE_TARGET = "server"
-  NEXT_PUBLIC_OPENAI_API_KEY = "sk-POcyyRhXrzVwwPedbzrHqfQgNNqslFSXTcgR3KEakZpdzzte"
-  NEXT_PUBLIC_OPENAI_API_BASE = "https://api.chatanywhere.tech/v1"
-  OPENAI_API_KEY = "sk-POcyyRhXrzVwwPedbzrHqfQgNNqslFSXTcgR3KEakZpdzzte"
-  OPENAI_API_BASE = "https://api.chatanywhere.tech/v1"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/api/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/auth/callback"
+  to = "/auth/callback"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

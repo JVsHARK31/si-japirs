@@ -5,13 +5,34 @@
   "installCommand": "npm install",
   "framework": "nextjs",
   "regions": ["sin1"],
-  "env": {
-    "NEXTAUTH_URL": {
-      "description": "The URL of your deployed application (e.g., https://si-japirs.vercel.app)",
-      "value": "https://si-japirs.vercel.app",
-      "required": true
+  "functions": {
+    "app/api/**/*": {
+      "maxDuration": 30
     }
   },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    }
+  ],
   "build": {
     "env": {
       "NODE_ENV": "production"
