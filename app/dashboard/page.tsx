@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { HeaderBackButton } from '@/components/back-button'
 import { Progress } from '@/components/ui/progress'
+import { LogoutButton } from '@/components/logout-button'
 import {
   FileText,
   BookOpen,
@@ -24,7 +25,8 @@ import {
   Plus,
   ArrowRight,
   Loader2,
-  Calculator
+  Calculator,
+  LogOut
 } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
 
@@ -168,12 +170,21 @@ export default function DashboardPage() {
                 {new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
               </p>
             </div>
-            <Link href="/writer" className="w-full sm:w-auto">
-              <Button size="lg" className="gap-2 w-full sm:w-auto">
-                <Plus className="h-4 w-4" />
-                Dokumen Baru
-              </Button>
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+              <Link href="/writer" className="w-full sm:w-auto">
+                <Button size="lg" className="gap-2 w-full sm:w-auto">
+                  <Plus className="h-4 w-4" />
+                  Dokumen Baru
+                </Button>
+              </Link>
+              <LogoutButton 
+                variant="outline"
+                size="lg"
+                className="w-full sm:w-auto"
+                showIcon={true}
+                showText={true}
+              />
+            </div>
           </motion.div>
         </div>
 
